@@ -12,5 +12,7 @@ public class Main {
         PyFiles analyzer = new PyFiles();
         analyzer.analyze(folderPath);
 
+        JavaFiles javaAnalyzer = new JavaFiles();
+        javaAnalyzer.analyze(folderPath);
     }
 }

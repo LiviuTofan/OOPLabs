@@ -1,6 +1,22 @@
-// Car.java
+public class Main {
+    public static void main(String[] args) {
+        Car myCar = new Car("Red", "BMW", 2.0, "Gasoline");
 
-public class Car {
+        System.out.println("Car:");
+        System.out.println("Color: " + myCar.getColor());
+        System.out.println("Brand: " + myCar.getBrand());
+        System.out.println("Engine Size: " + myCar.getEngineSize() + " liters");
+        System.out.println("Fuel Type: " + myCar.getFuelType());
+
+        Person person = new Person("John", 30);
+
+        System.out.println("\nPerson:");
+        System.out.println("Name: " + person.getName());
+        System.out.println("Age: " + person.getAge());
+    }
+}
+
+class Car {
     private String color;
     private String brand;
     private double engineSize;
@@ -17,31 +33,33 @@ public class Car {
         return color;
     }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
-
     public String getBrand() {
         return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
     }
 
     public double getEngineSize() {
         return engineSize;
     }
 
-    public void setEngineSize(double engineSize) {
-        this.engineSize = engineSize;
-    }
-
     public String getFuelType() {
         return fuelType;
     }
+}
 
-    public void setFuelType(String fuelType) {
-        this.fuelType = fuelType;
+class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
     }
 }

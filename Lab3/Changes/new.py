@@ -46,3 +46,8 @@ while True:
 
 for row in matrix:
     print(row)
+
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
