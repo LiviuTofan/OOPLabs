@@ -9,5 +9,8 @@ public class Main {
 
         ImageSize.printImageSizesInFolder(folderPath);
 
+        PyFiles analyzer = new PyFiles();
+        analyzer.analyze(folderPath);
+
     }
 }
