@@ -1,18 +1,26 @@
 public class Main {
     public static void main(String[] args) {
-        // Replace this with the path to your folder
+        // Define the folder path you want to monitor for changes
         String folderPath = "C:\\Users\\liviu\\IdeaProjects\\OOPLabs\\Lab3\\Changes";
 
-        FolderReader.listFilesInFolder(folderPath);
+        // Create a FileStatus object to track file change status
+        FileStatus fileStatus = new FileStatus(folderPath);
 
-        TxtFiles.analyzeTextFilesInDirectory(folderPath);
+        // Create a thread for DetectChanges and pass the FileStatus object
+        Thread detectChangesThread = new Thread(() -> {
+            // Initialize DetectChanges with the folder path and FileStatus object
+            DetectChanges detector = new DetectChanges(folderPath, fileStatus);
+            // Start monitoring for file changes
+            detector.startMonitoring();
+        });
 
-        ImageSize.printImageSizesInFolder(folderPath);
+        // Start the DetectChanges thread to monitor file changes
+        detectChangesThread.start();
 
-        PyFiles analyzer = new PyFiles();
-        analyzer.analyze(folderPath);
+        // Create MenuManager with the folder path and the FileStatus object
+        MenuManager menuManager = new MenuManager(folderPath, fileStatus);
 
-        JavaFiles javaAnalyzer = new JavaFiles();
-        javaAnalyzer.analyze(folderPath);
+        // Example usage of the MenuManager with options
+        menuManager.processOptions();
     }
 }

@@ -1,36 +1,28 @@
 import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 public class ImageSize {
-    public static void printImageSizesInFolder(String folderPath) {
-        File folder = new File(folderPath);
+    // A method to get the size of an image file
+    public static String getImageSize(File imageFile) {
+        try {
+            // Read the image from the provided File object
+            BufferedImage image = ImageIO.read(imageFile);
 
-        if (folder.exists() && folder.isDirectory()) {
-            File[] imageFiles = folder.listFiles((dir, name) ->
-                    name.toLowerCase().endsWith(".png") || name.toLowerCase().endsWith(".jpg"));
-
-            if (imageFiles != null) {
-                for (File imageFile : imageFiles) {
-                    try {
-                        BufferedImage image = ImageIO.read(imageFile);
-                        if (image != null) {
-                            int width = image.getWidth();
-                            int height = image.getHeight();
-                            System.out.println("File: " + imageFile.getName());
-                            System.out.println("Image Dimensions: " + width + "x" + height + " pixels");
-                            System.out.println();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+            // Check if the image was successfully loaded
+            if (image != null) {
+                // Get the width and height of the image
+                int width = image.getWidth();
+                int height = image.getHeight();
+                // Return the image size in the format "width x height"
+                return width + "x" + height;
             } else {
-                System.out.println("No .png or .jpg files found in the directory.");
+                // Return a message indicating that the image was not found or is not supported
+                return "Image not found or not supported.";
             }
-        } else {
-            System.out.println("Invalid directory path or the directory doesn't exist.");
+        } catch (Exception e) {
+            // Handle exceptions and return an error message
+            return "Error: " + e.getMessage();
         }
     }
 }

@@ -2,37 +2,29 @@ import java.io.*;
 import java.util.Scanner;
 
 public class TxtFiles {
-    public static void analyzeTextFilesInDirectory(String folderPath) {
-        if (folderPath != null) {
-            File directory = new File(folderPath);
+    // Analyze a text file and return information about it
+    public String analyzeTextFile(String filePath) {
+        File file = new File(filePath);
 
-            if (directory.exists() && directory.isDirectory()) {
-                File[] textFiles = directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
+        // Check if the file exists and is a text file
+        if (file.exists() && file.isFile() && file.getName().toLowerCase().endsWith(".txt")) {
+            int lineCount = countLines(file);
+            int wordCount = countWords(file);
+            int charCount = countCharacters(file);
 
-                if (textFiles != null) {
-                    for (File file : textFiles) {
-                        int lineCount = countLines(file);
-                        int wordCount = countWords(file);
-                        int charCount = countCharacters(file);
+            // Construct a result string with file information
 
-                        System.out.println("File: " + file.getName());
-                        System.out.println("Line Count: " + lineCount);
-                        System.out.println("Word Count: " + wordCount);
-                        System.out.println("Character Count: " + charCount);
-                        System.out.println();
-                    }
-                } else {
-                    System.out.println("No .txt files found in the directory.");
-                }
-            } else {
-                System.out.println("Invalid directory path or the directory doesn't exist.");
-            }
+            return "File: " + file.getName() + "\n" +
+                    "Line Count: " + lineCount + "\n" +
+                    "Word Count: " + wordCount + "\n" +
+                    "Character Count: " + charCount;
         } else {
-            System.out.println("Folder path is null.");
+            return "Invalid text file path or the file doesn't exist.";
         }
     }
 
-    public static int countLines(File file) {
+    // Count the number of lines in a text file
+    public int countLines(File file) {
         int lineCount = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             while (reader.readLine() != null) {
@@ -44,7 +36,8 @@ public class TxtFiles {
         return lineCount;
     }
 
-    public static int countWords(File file) {
+    // Count the number of words in a text file
+    public int countWords(File file) {
         int wordCount = 0;
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNext()) {
@@ -57,7 +50,8 @@ public class TxtFiles {
         return wordCount;
     }
 
-    public static int countCharacters(File file) {
+    // Count the number of characters in a text file
+    public int countCharacters(File file) {
         int charCount = 0;
         try (FileReader reader = new FileReader(file)) {
             while (reader.read() != -1) {
