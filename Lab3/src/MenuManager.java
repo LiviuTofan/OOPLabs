@@ -1,23 +1,24 @@
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class MenuManager {
     private final String folderPath;
-    private final FileStatus fileStatus; // Object to track file status changes
-    private final PyFiles pyFileAnalyzer; // Object to analyze Python files
+    private final FileStatus fileStatus;
 
-    // Constructor to initialize the folder path, file status object, and Python file analyzer
     public MenuManager(String folderPath, FileStatus fileStatus) {
         this.folderPath = folderPath;
-        this.fileStatus = fileStatus; // Initialize the FileStatus object
-        this.pyFileAnalyzer = new PyFiles(); // Initialize the PyFiles object
+        this.fileStatus = fileStatus;
+        FolderChanges folderChanges = new FolderChanges(folderPath);
+        folderChanges.startMonitoring(); // Start monitoring for file additions and deletions
     }
 
-    // Process user options in the menu
     public void processOptions() {
         Scanner scanner = new Scanner(System.in);
         TxtFiles textFileAnalyzer = new TxtFiles();
         JavaFiles javaFileAnalyzer = new JavaFiles();
+        PyFiles pyFileAnalyzer = new PyFiles();
 
         while (true) {
             System.out.println("Menu:");
@@ -33,7 +34,6 @@ public class MenuManager {
                 String filename = input.substring(5);
                 String filePath = this.folderPath + File.separator + filename;
 
-                // Analyze and display information based on the file type
                 if (filename.endsWith(".txt")) {
                     String result = textFileAnalyzer.analyzeTextFile(filePath);
                     System.out.println("-------------");
@@ -44,7 +44,6 @@ public class MenuManager {
                 } else if (filename.endsWith(".py")) {
                     pyFileAnalyzer.printPythonFileInfo(filePath);
                 } else if (filename.endsWith(".jpg") || filename.endsWith(".png")) {
-                    // Analyze and display image size for .jpg and .png files
                     File imageFile = new File(filePath);
                     String imageSize = ImageSize.getImageSize(imageFile);
                     System.out.println("-------------");
@@ -54,16 +53,23 @@ public class MenuManager {
                     System.out.println("Unsupported file type.");
                 }
             } else if (input.equalsIgnoreCase("status")) {
-                // Display the status of tracked files
+                fileStatus.checkForNewFilesAndMissingFiles();
                 System.out.println("-------------");
                 System.out.println("File Status:");
                 fileStatus.showFileStatus();
                 System.out.println("-------------");
-            } else {
+            }
+            else {
                 switch (input) {
-                    case "commit" -> System.out.println("Commit option selected");
-
-                    // Add your commit logic using this.folderPath
+                    case "commit" -> {
+                        LocalDateTime currentDateTime = LocalDateTime.now();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                        String formattedDateTime = currentDateTime.format(formatter);
+                        System.out.println("-------------");
+                        System.out.println("Created Snapshot at: " + formattedDateTime);
+                        System.out.println("-------------");
+                        fileStatus.resetAllFileStatus();
+                    }
                     case "exit" -> {
                         System.out.println("Exiting the program");
                         System.exit(0);
@@ -72,5 +78,17 @@ public class MenuManager {
                 }
             }
         }
+    }
+
+    public static void main(String[] args) {
+        if (args.length < 1) {
+            System.out.println("Usage: java MenuManager <folderPath>");
+            System.exit(1);
+        }
+
+        String folderPath = args[0];
+        FileStatus fileStatus = new FileStatus(folderPath);
+        MenuManager menuManager = new MenuManager(folderPath, fileStatus);
+        menuManager.processOptions();
     }
 }
