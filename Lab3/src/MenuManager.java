@@ -43,13 +43,13 @@ public class MenuManager {
                     javaFileAnalyzer.analyze(filePath);
                 } else if (filename.endsWith(".py")) {
                     pyFileAnalyzer.printPythonFileInfo(filePath);
-                } else if (filename.endsWith(".jpg") || filename.endsWith(".png")) {
+                }  else if (filename.endsWith(".jpg") || filename.endsWith(".png")) {
                     File imageFile = new File(filePath);
                     String imageSize = ImageSize.getImageSize(imageFile);
                     System.out.println("-------------");
                     System.out.println("Image Size: " + imageSize);
                     System.out.println("-------------");
-                } else {
+            } else {
                     System.out.println("Unsupported file type.");
                 }
             } else if (input.equalsIgnoreCase("status")) {

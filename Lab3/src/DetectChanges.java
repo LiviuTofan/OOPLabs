@@ -13,7 +13,7 @@ public class DetectChanges {
             // Create a WatchService and register it to monitor the folder for file modifications
             this.watchService = FileSystems.getDefault().newWatchService();
             Path path = Paths.get(folderPath);
-            path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
+            path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_MODIFY);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,3 +64,4 @@ public class DetectChanges {
         detector.startMonitoring();
     }
 }
+
