@@ -1,29 +1,47 @@
 import java.io.*;
 import java.util.Scanner;
 
-public class TxtFiles {
-    // Analyze a text file and return information about it
-    public String analyzeTextFile(String filePath) {
+public class TxtFiles extends MyFile {
+    private String currentFileName;
+    private int lineCount;
+    private int wordCount;
+    private int charCount;
+    @Override
+    public void analyze(String filePath) {
         File file = new File(filePath);
 
-        // Check if the file exists and is a text file
         if (file.exists() && file.isFile() && file.getName().toLowerCase().endsWith(".txt")) {
-            int lineCount = countLines(file);
-            int wordCount = countWords(file);
-            int charCount = countCharacters(file);
+            lineCount = countLines(file);
+            wordCount = countWords(file);
+            charCount = countCharacters(file);
 
-            // Construct a result string with file information
-
-            return "File: " + file.getName() + "\n" +
-                    "Line Count: " + lineCount + "\n" +
-                    "Word Count: " + wordCount + "\n" +
-                    "Character Count: " + charCount;
-        } else {
-            return "Invalid text file path or the file doesn't exist.";
+            currentFileName = file.getName();
         }
     }
 
-    // Count the number of lines in a text file
+    @Override
+    public void printInfo() {
+        File[] files = readFolder();
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile() && file.getName().toLowerCase().endsWith(".txt")) {
+                    if (file.getName().equalsIgnoreCase(currentFileName)) {
+                        analyze(file.getAbsolutePath());
+
+                        System.out.println("-------------");
+                        System.out.println("File: " + currentFileName);
+                        System.out.println("Line Count: " + lineCount);
+                        System.out.println("Word Count: " + wordCount);
+                        System.out.println("Character Count: " + charCount);
+                        System.out.println("-------------");
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     public int countLines(File file) {
         int lineCount = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -36,7 +54,6 @@ public class TxtFiles {
         return lineCount;
     }
 
-    // Count the number of words in a text file
     public int countWords(File file) {
         int wordCount = 0;
         try (Scanner scanner = new Scanner(file)) {
@@ -50,7 +67,6 @@ public class TxtFiles {
         return wordCount;
     }
 
-    // Count the number of characters in a text file
     public int countCharacters(File file) {
         int charCount = 0;
         try (FileReader reader = new FileReader(file)) {

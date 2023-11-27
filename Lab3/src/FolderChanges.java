@@ -62,4 +62,3 @@ public class FolderChanges {
         thread.start();
     }
 }
-

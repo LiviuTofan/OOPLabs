@@ -3,19 +3,32 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class PyFiles {
-    // Analyze a single Python file
-    public void analyzePythonFile(File file) {
-        int lines = 0;
-        int classes = 0;
-        int methods = 0;
+public class PyFiles extends MyFile {
+    private String currentFileName;
+    private int lines;
+    private int classes;
+    private int methods;
+    @Override
+    public void analyze(String filePath) {
+        File file = new File(filePath);
+        currentFileName = file.getName();
+
+        if (!file.exists() || !file.isFile() || !currentFileName.endsWith(".py")) {
+            System.out.println("File not found or not a Python file.");
+            return;
+        }
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            lines = 0;
+            classes = 0;
+            methods = 0;
             String line;
             boolean inMethod = false;
+
+            // Regular expressions to match class and method definitions
             while ((line = reader.readLine()) != null) {
                 lines++;
-                line = line.trim();
+                line = line.trim(); // cut space in front of text
                 if (line.startsWith("class ")) {
                     classes++;
                 } else if (line.startsWith("def ")) {
@@ -25,25 +38,18 @@ public class PyFiles {
                     inMethod = false;
                 }
             }
-            System.out.println("-------------");
-            System.out.println("File: " + file.getName());
-            System.out.println("Line Count: " + lines);
-            System.out.println("Class Count: " + classes);
-            System.out.println("Method Count: " + methods);
-            System.out.println("-------------");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    // Print information for a specific Python file
-    public void printPythonFileInfo(String fileName) {
-        File file = new File(fileName);
-
-        if (file.exists() && file.isFile() && file.getName().endsWith(".py")) {
-            analyzePythonFile(file);
-        } else {
-            System.out.println("Invalid Python file path or the file doesn't exist.");
-        }
+    @Override
+    public void printInfo() {
+        System.out.println("-------------");
+        System.out.println("File: " + currentFileName);
+        System.out.println("Line Count: " + lines);
+        System.out.println("Class Count: " + classes);
+        System.out.println("Method Count: " + methods);
+        System.out.println("-------------");
     }
 }

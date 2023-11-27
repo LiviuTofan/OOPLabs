@@ -19,6 +19,7 @@ public class MenuManager {
         TxtFiles textFileAnalyzer = new TxtFiles();
         JavaFiles javaFileAnalyzer = new JavaFiles();
         PyFiles pyFileAnalyzer = new PyFiles();
+        ImageSize imageSizeAnalyzer = new ImageSize();
 
         while (true) {
             System.out.println("Menu:");
@@ -35,31 +36,27 @@ public class MenuManager {
                 String filePath = this.folderPath + File.separator + filename;
 
                 if (filename.endsWith(".txt")) {
-                    String result = textFileAnalyzer.analyzeTextFile(filePath);
-                    System.out.println("-------------");
-                    System.out.println(result);
-                    System.out.println("-------------");
+                    textFileAnalyzer.analyze(filePath);
+                    textFileAnalyzer.printInfo();
                 } else if (filename.endsWith(".java")) {
                     javaFileAnalyzer.analyze(filePath);
+                    javaFileAnalyzer.printInfo();
                 } else if (filename.endsWith(".py")) {
-                    pyFileAnalyzer.printPythonFileInfo(filePath);
-                }  else if (filename.endsWith(".jpg") || filename.endsWith(".png")) {
-                    File imageFile = new File(filePath);
-                    String imageSize = ImageSize.getImageSize(imageFile);
-                    System.out.println("-------------");
-                    System.out.println("Image Size: " + imageSize);
-                    System.out.println("-------------");
-            } else {
+                    pyFileAnalyzer.analyze(filePath);
+                    pyFileAnalyzer.printInfo();
+                } else if (filename.endsWith(".jpg") || filename.endsWith(".png")) {
+                    imageSizeAnalyzer.setTargetFileName(filename);
+                    imageSizeAnalyzer.printInfo();
+                } else {
                     System.out.println("Unsupported file type.");
                 }
-            } else if (input.equalsIgnoreCase("status")) {
+        } else if (input.equalsIgnoreCase("status")) {
                 fileStatus.checkForNewFilesAndMissingFiles();
                 System.out.println("-------------");
                 System.out.println("File Status:");
                 fileStatus.showFileStatus();
                 System.out.println("-------------");
-            }
-            else {
+            } else {
                 switch (input) {
                     case "commit" -> {
                         LocalDateTime currentDateTime = LocalDateTime.now();
@@ -69,6 +66,7 @@ public class MenuManager {
                         System.out.println("Created Snapshot at: " + formattedDateTime);
                         System.out.println("-------------");
                         fileStatus.resetAllFileStatus();
+                        fileStatus.commit(); // Set the committed flag to true
                     }
                     case "exit" -> {
                         System.out.println("Exiting the program");
@@ -82,7 +80,6 @@ public class MenuManager {
 
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.println("Usage: java MenuManager <folderPath>");
             System.exit(1);
         }
 

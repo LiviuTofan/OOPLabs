@@ -4,22 +4,25 @@ import java.nio.file.*;
 import java.util.regex.*;
 import java.io.File;
 
-public class JavaFiles {
-    // Analyze a Java file and display information about its classes and methods
+public class JavaFiles extends MyFile {
+    private String currentFileName;
+    private int lineCount;
+    private int classCount;
+    private int methodCount;
+    @Override
     public void analyze(String filePath) {
         File file = new File(filePath);
-        String fileName = file.getName(); // Get the file name
+        currentFileName = file.getName();
 
-        // Check if the file exists and is a Java file
-        if (!file.exists() || !file.isFile() || !fileName.endsWith(".java")) {
+        if (!file.exists() || !file.isFile() || !currentFileName.endsWith(".java")) {
             System.out.println("File not found or not a Java file.");
             return;
         }
 
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath))) {
-            int lineCount = 0;
-            int classCount = 0;
-            int methodCount = 0;
+            lineCount = 0;
+            classCount = 0;
+            methodCount = 0;
 
             String line;
             boolean inCommentBlock = false;
@@ -51,16 +54,17 @@ public class JavaFiles {
                     }
                 }
             }
-
-            // Display the analysis results
-            System.out.println("-------------");
-            System.out.println("File: " + fileName);
-            System.out.println("Lines: " + lineCount);
-            System.out.println("Classes: " + classCount);
-            System.out.println("Methods: " + methodCount);
-            System.out.println("-------------");
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void printInfo() {
+        System.out.println("-------------");
+        System.out.println("File: " + currentFileName);
+        System.out.println("Lines: " + lineCount);
+        System.out.println("Classes: " + classCount);
+        System.out.println("Methods: " + methodCount);
+        System.out.println("-------------");
     }
 }

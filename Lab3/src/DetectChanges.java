@@ -10,7 +10,7 @@ public class DetectChanges {
         this.fileStatus = fileStatus;
 
         try {
-            // Create a WatchService and register it to monitor the folder for file modifications
+            // WatchService to monitor the folder for file modifications
             this.watchService = FileSystems.getDefault().newWatchService();
             Path path = Paths.get(folderPath);
             path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_DELETE, StandardWatchEventKinds.ENTRY_MODIFY);
@@ -19,7 +19,6 @@ public class DetectChanges {
         }
     }
 
-    // Start monitoring for file changes
     public void startMonitoring() {
         while (true) {
             try {
@@ -37,7 +36,7 @@ public class DetectChanges {
                             System.out.println("-------------------------------");
                             System.out.println("File: " + fileName + " - changed");
                             System.out.println("-------------------------------");
-
+                            System.out.print("Enter your choice: ");
                             // Update the file status as changed
                             fileStatus.fileChanged(fileName);
                         }
@@ -45,7 +44,6 @@ public class DetectChanges {
                 }
 
                 key.reset();
-                System.out.print("Enter your choice: ");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -64,4 +62,3 @@ public class DetectChanges {
         detector.startMonitoring();
     }
 }
-
