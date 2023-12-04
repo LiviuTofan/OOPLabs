@@ -8,7 +8,7 @@ public class MenuManagerQueue {
         while (true) {
             System.out.println("Choose Option:");
             System.out.println("1. Queue");
-            System.out.println("2. Stack"); // Added option for Stack
+            System.out.println("2. Stack");  // Add this line
             System.out.println("e - exit");
             System.out.print("Your option: ");
             String option = scanner.next();
@@ -27,8 +27,9 @@ public class MenuManagerQueue {
                         showQueueMenu();
                         break;
                     case 2:
-                        MenuManagerStack<T> stackManager = new MenuManagerStack<>();
-                        stackManager.showStackMenu();
+                        // Instantiate and use MenuManagerStack
+                        MenuManagerStack menuManagerStack = new MenuManagerStack();
+                        menuManagerStack.showStackMenu();
                         break;
                     default:
                         System.out.println("Invalid input, please enter a valid option.");
@@ -39,7 +40,6 @@ public class MenuManagerQueue {
             }
         }
     }
-
     private <T> void showQueueMenu() {
         Scanner scanner = new Scanner(System.in);
 

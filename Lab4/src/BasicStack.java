@@ -44,8 +44,8 @@ public class BasicStack<T> implements Stacks<T> {
             System.out.println("Stack is empty.");
         } else {
             System.out.print("Stack elements: ");
-            for (T element : stack) {
-                System.out.print(element + ", ");
+            for (int i = size() - 1; i >= 0; i--) {
+                System.out.print(stack.elementAt(i) + ", ");
             }
             System.out.println();
         }

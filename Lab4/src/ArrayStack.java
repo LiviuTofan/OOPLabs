@@ -11,7 +11,7 @@ public class ArrayStack<T> implements Stacks<T> {
     @Override
     public void push(T item) {
         if (isFull()) {
-            System.out.println("Stack is full. Cannot push.");
+            System.out.println("Stack is full, cannot push.");
         } else {
             array[++top] = item;
         }
@@ -20,7 +20,6 @@ public class ArrayStack<T> implements Stacks<T> {
     @Override
     public T pop() {
         if (isEmpty()) {
-            System.out.println("Stack is empty. Cannot pop.");
             return null;
         } else {
             T data = (T) array[top];
@@ -55,7 +54,7 @@ public class ArrayStack<T> implements Stacks<T> {
             System.out.println("Stack is empty.");
         } else {
             System.out.print("Stack elements: ");
-            for (int i = 0; i <= top; i++) {
+            for (int i = top; i >= 0; i--) {
                 System.out.print(array[i] + ", ");
             }
             System.out.println();
