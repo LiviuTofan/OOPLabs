@@ -1,7 +1,7 @@
 public class Main {
 
     public static void main(String[] args) {
-        MenuManager menuManager = new MenuManager();
+        MenuManagerQueue menuManager = new MenuManagerQueue();
         menuManager.showMainMenu();
     }
 }
